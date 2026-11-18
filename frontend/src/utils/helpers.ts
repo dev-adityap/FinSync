@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatNumber(num: number): string {
-  return new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(num)
+  return new Intl.NumberFormat('en-US').format(num)
 }
 
 export function formatNumberFull(num: number): string {
@@ -66,8 +66,8 @@ export function downloadBlob(blob: Blob, filename: string): void {
 }
 
 export function parseCSV(content: string): { headers: string[]; rows: Record<string, unknown>[] } {
+  if (!content || !content.trim()) return { headers: [], rows: [] }
   const lines = content.trim().split('\n')
-  if (lines.length === 0) return { headers: [], rows: [] }
   const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''))
   const rows = lines.slice(1).map(line => {
     const values = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''))
