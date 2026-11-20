@@ -1,0 +1,9 @@
+{
+  "name": "FinSync",
+  "short_name": "FinSync",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F4F5F7",
+  "theme_color": "#111111",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

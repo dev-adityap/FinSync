@@ -1,0 +1,4 @@
+customer_id,customer_name,email,amount,status
+301,Suman Roy,invalid-email-format,not-a-number,Active
+303,Valid User,valid3@example.com,2200,Active
+304,Destination Name,blank-name@example.com,950.50,Inactive

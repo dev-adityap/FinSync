@@ -1,0 +1,5 @@
+customer_id,customer_name,email,amount,status
+00101,Rahul Sharma,rahul@example.com,5000,Active
+201,Karan Verma,karan@example.com,1200,Active
+201,Karan Verma Dest Dup,karan@example.com,1200,Active
+202,Riya Sen,riya@example.com,3400,Active

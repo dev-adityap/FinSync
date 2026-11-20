@@ -1,0 +1,5 @@
+ID,Name,Email,Amount,Status
+301,Suman Roy,invalid-email-format,not-a-number,Active
+,Missing Identifier Row,valid@example.com,1500,Active
+303,Valid User,valid3@example.com,2200,Active
+304,,blank-name@example.com,,Inactive

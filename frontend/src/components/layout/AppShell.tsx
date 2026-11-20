@@ -1,235 +1,155 @@
-import React from 'react'
-import { Link, useLocation, Outlet } from 'react-router-dom'
-import { GlassButton, GlassCard } from '../ui/GlassComponents'
-import { cn } from '../../utils/helpers'
+import React, { useEffect, useState } from "react";
+import { Link, NavLink, Outlet } from "react-router-dom";
+import { clsx } from "clsx";
 import {
-  Menu, X, Sun, Moon, ChevronDown, LogIn, User, Settings, HelpCircle,
-  LayoutDashboard, FolderKanban, PlusCircle, History, Database, FileText, Cog,
-} from 'lucide-react'
-import { useTheme } from '../../context/ThemeContext'
-import { useWorkspace } from '../../context/WorkspaceContext'
-import { useAuth } from '../../context/AuthContext'
+  LayoutDashboard,
+  FolderKanban,
+  GitCompareArrows,
+  History,
+  Database,
+  FileSpreadsheet,
+  Settings,
+  PanelLeftClose,
+  PanelLeftOpen,
+  X,
+  Plus,
+  Layers,
+} from "lucide-react";
+import { Topbar } from "./Topbar";
+import { BackToTop } from "../glass/BackToTop";
+import { HelpFab } from "../glass/HelpFab";
+import { workspaceRepo } from "../../db/dexieRepository";
+import type { ProjectSummary } from "../../types/project";
 
-interface NavbarProps {
-  onMenuClick: () => void
-  className?: string
-}
+const NAV_ITEMS = [
+  { to: "/app", label: "Dashboard", icon: <LayoutDashboard className="h-4 w-4" /> , end: true },
+  { to: "/app/projects", label: "Projects", icon: <FolderKanban className="h-4 w-4" /> },
+  { to: "/app/reconcile/new", label: "New Reconciliation", icon: <GitCompareArrows className="h-4 w-4" /> },
+  { to: "/app/data-explorer", label: "Data Explorer", icon: <Database className="h-4 w-4" /> },
+  { to: "/app/reports", label: "Reports", icon: <FileSpreadsheet className="h-4 w-4" /> },
+  { to: "/app/history", label: "History", icon: <History className="h-4 w-4" /> },
+  { to: "/app/settings", label: "Settings", icon: <Settings className="h-4 w-4" /> },
+];
 
-export function Navbar({ onMenuClick, className }: NavbarProps) {
-  const { mode, toggleTheme } = useTheme()
-  const { settings } = useWorkspace()
-  const { isAuthenticated, login, logout } = useAuth()
-  const location = useLocation()
+export const AppShell: React.FC = () => {
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [projects, setProjects] = useState<ProjectSummary[]>([]);
 
-  const navItems = [
-    { href: '/', label: 'Product' },
-    { href: '/features', label: 'Features' },
-    { href: '/how-it-works', label: 'How It Works' },
-    { href: '/use-cases', label: 'Use Cases' },
-    { href: '/docs', label: 'Documentation' },
-  ]
+  useEffect(() => {
+    let active = true;
+    workspaceRepo.listProjectsWithSummary().then((list) => {
+      if (active) setProjects(list.slice(0, 4));
+    }).catch(() => {});
+    return () => { active = false; };
+  }, []);
 
-  const isAppRoute = location.pathname.startsWith('/app')
-
-  return (
-    <header className={cn('fixed top-0 left-0 right-0 z-40 glass-secondary border-b border-white/10 backdrop-blur-[32px]', className)}>
-      <div className="max-w-[1400px] mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-8">
-          <button
-            onClick={onMenuClick}
-            className="md:hidden glass-secondary p-2 rounded-glass-sm text-text-secondary hover:text-text-primary hover:bg-white/10 transition-colors"
-            aria-label="Open menu"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-
-          <Link to={isAppRoute ? '/app' : '/'} className="flex items-center gap-2" aria-label="FinSync Home">
-            <div className="glass-primary p-2 rounded-glass-sm">
-              <svg className="w-6 h-6 text-electric-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <span className="font-display font-semibold text-xl text-text-primary hidden sm:block">FinSync</span>
-          </Link>
-
-          {!isAppRoute && (
-            <nav className="hidden md:flex items-center gap-1" role="navigation" aria-label="Main navigation">
-              {navItems.map(item => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className={cn(
-                    'px-3 py-2 rounded-glass-sm text-sm font-medium transition-all duration-200',
-                    location.pathname === item.href
-                      ? 'text-text-primary bg-white/5'
-                      : 'text-text-secondary hover:text-text-primary hover:bg-white/5'
-                  )}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
-          )}
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            onClick={toggleTheme}
-            className="glass-secondary p-2 rounded-glass-sm text-text-secondary hover:text-text-primary hover:bg-white/10 transition-colors"
-            aria-label={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
-            {mode === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </button>
-
-          {isAppRoute ? (
-            <div className="flex items-center gap-2">
-              <Link to="/app/settings" className="glass-secondary p-2 rounded-glass-sm text-text-secondary hover:text-text-primary hover:bg-white/10 transition-colors" aria-label="Settings">
-                <Settings className="w-5 h-5" />
-              </Link>
-              <div className="relative">
-                <button className="flex items-center gap-2 glass-secondary px-3 py-2 rounded-glass-sm hover:bg-white/10 transition-colors">
-                  <div className="glass-primary w-8 h-8 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4 text-text-secondary" />
-                  </div>
-                  <span className="text-sm font-medium text-text-primary hidden sm:block">{settings.workspaceLabel}</span>
-                  <ChevronDown className="w-4 h-4 text-text-muted hidden sm:block" />
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <Link to="/login" className="btn-ghost">
-                <LogIn className="w-4 h-4 mr-2" /> Sign In
-              </Link>
-              <Link to="/register" className="btn-primary">
-                Get Started
-              </Link>
-            </div>
-          )}
-        </div>
-      </div>
-    </header>
-  )
-}
-
-interface SidebarProps {
-  isOpen: boolean
-  onClose: () => void
-  className?: string
-}
-
-export function Sidebar({ isOpen, onClose, className }: SidebarProps) {
-  const location = useLocation()
-  const { currentProjectId } = useWorkspace()
-
-  const navSections = [
-    {
-      title: 'Main',
-      items: [
-        { href: '/app', label: 'Overview', icon: LayoutDashboard },
-        { href: '/app/projects', label: 'Projects', icon: FolderKanban },
-        { href: '/app/reconcile/new', label: 'New Reconciliation', icon: PlusCircle },
-      ],
-    },
-    {
-      title: 'Data',
-      items: [
-        { href: '/app/history', label: 'Reconciliation History', icon: History },
-        { href: '/app/data-explorer', label: 'Data Explorer', icon: Database },
-        { href: '/app/reports', label: 'Reports', icon: FileText },
-      ],
-    },
-    {
-      title: 'Settings',
-      items: [
-        { href: '/app/settings', label: 'Settings', icon: Cog },
-      ],
-    },
-  ]
+  const renderNav = (onNavigate?: () => void) => (
+    <nav className="flex-1 px-3 py-4 space-y-1">
+      {NAV_ITEMS.map((item) => (
+        <NavLink
+          key={item.to}
+          to={item.to}
+          end={item.end}
+          onClick={onNavigate}
+          className={({ isActive }) =>
+            clsx(
+              "flex items-center gap-3 rounded-full px-3 py-2 text-sm font-medium transition-colors",
+              isActive ? "bg-[#1F1E1D] text-white" : "text-[#A1A1AA] hover:text-white hover:bg-[#1F1E1D]/60"
+            )
+          }
+        >
+          {item.icon}
+          {!collapsed && <span className="truncate">{item.label}</span>}
+        </NavLink>
+      ))}
+    </nav>
+  );
 
   return (
-    <>
-      <div
-        className={cn('fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity', isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none')}
-        onClick={onClose}
-        aria-hidden="true"
-      />
+    <div className="min-h-screen bg-[#121110] p-2 sm:p-3 flex">
+      {/* Sidebar */}
       <aside
-        className={cn(
-          'fixed left-0 top-16 bottom-0 z-50 w-72 glass-secondary border-r border-white/10 flex flex-col transition-transform duration-300 ease-glass',
-          isOpen ? 'translate-x-0' : '-translate-x-full',
-          className
+        className={clsx(
+          "hidden lg:flex flex-col bg-[#121110] border border-white/10 rounded-[22px] transition-all",
+          collapsed ? "w-16" : "w-[240px]"
         )}
-        role="navigation"
-        aria-label="Application navigation"
       >
-        <div className="p-4 border-b border-white/10">
-          <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wider">Navigation</h3>
+        <div className="flex items-center justify-between px-4 h-14">
+          <Link to="/" className="flex items-center gap-2">
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-white text-[#121110]">
+              <Layers className="h-4 w-4" />
+            </span>
+            {!collapsed && <span className="text-white font-bold tracking-tight">FinSync</span>}
+          </Link>
+          <button
+            onClick={() => setCollapsed((c) => !c)}
+            className="text-[#A1A1AA] hover:text-white p-1"
+            aria-label="Toggle sidebar"
+          >
+            {collapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+          </button>
         </div>
-        <nav className="flex-1 p-4 space-y-6 overflow-auto">
-          {navSections.map(section => (
-            <div key={section.title}>
-              <h4 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3">{section.title}</h4>
-              <ul className="space-y-1" role="list">
-                {section.items.map(item => {
-                  const isActive = location.pathname === item.href ||
-                    (item.href !== '/app' && location.pathname.startsWith(item.href))
-                  const Icon = item.icon
-                  return (
-                    <li key={item.href}>
-                      <Link
-                        to={item.href}
-                        onClick={onClose}
-                        className={cn(
-                          'flex items-center gap-3 px-3 py-2.5 rounded-glass-sm text-sm font-medium transition-all duration-200',
-                          isActive
-                            ? 'glass-primary text-text-primary'
-                            : 'text-text-secondary hover:text-text-primary hover:bg-white/5'
-                        )}
-                        aria-current={isActive ? 'page' : undefined}
-                      >
-                        <Icon className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-                        {item.label}
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ul>
+
+        {renderNav()}
+
+        <div className="px-3 pb-2">
+          {!collapsed && (
+            <div className="flex items-center justify-between px-2 py-2 text-xs text-[#A1A1AA]">
+              <span>Projects</span>
+              <Link to="/app/projects" className="hover:text-white"><Plus className="h-3.5 w-3.5" /></Link>
             </div>
-          ))}
-        </nav>
-        <div className="p-4 border-t border-white/10">
-          <div className="glass-secondary p-4 rounded-glass-sm">
-            <p className="text-sm text-text-secondary mb-2">Workspace</p>
-            <p className="text-sm font-medium text-text-primary truncate">{currentProjectId ? 'Active Project' : 'No project selected'}</p>
-            <Link to="/app/projects" className="text-sm text-electric-blue hover:underline mt-2 inline-block">Manage Projects</Link>
+          )}
+          <div className="space-y-1">
+            {projects.map((p) => (
+              <Link
+                key={p.id}
+                to="/app/projects"
+                className="block truncate text-xs text-[#A1A1AA] hover:text-white px-2 py-1 rounded-full hover:bg-[#1F1E1D]"
+              >
+                {!collapsed && p.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-auto p-3 border-t border-white/10">
+          <div className="text-xs text-[#A1A1AA]">
+            {!collapsed && (
+              <>
+                <div className="font-medium text-white">Guest Workspace</div>
+                <div>Local IndexedDB</div>
+              </>
+            )}
           </div>
         </div>
       </aside>
-    </>
-  )
-}
 
-interface AppShellProps {}
-
-export function AppShell(): JSX.Element {
-  const [sidebarOpen, setSidebarOpen] = React.useState(false)
-  const location = useLocation()
-  const isAppRoute = location.pathname.startsWith('/app')
-
-  if (!isAppRoute) {
-    return <Outlet />
-  }
-
-  return (
-    <div className="min-h-screen">
-      <Navbar onMenuClick={() => setSidebarOpen(true)} />
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <main className="pt-16 md:pl-72 min-h-screen transition-all duration-300">
-        <div className="max-w-[1400px] mx-auto p-4 md:p-6 lg:p-8">
-          <Outlet />
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden flex">
+          <div className="fixed inset-0 bg-black/60" onClick={() => setMobileOpen(false)} />
+          <aside className="relative z-10 w-72 max-w-[82vw] bg-[#121110] flex flex-col rounded-r-[22px]">
+            <div className="flex items-center justify-between px-4 h-14">
+              <span className="text-white font-bold">FinSync</span>
+              <button onClick={() => setMobileOpen(false)} className="text-[#A1A1AA]"><X className="h-5 w-5" /></button>
+            </div>
+            {renderNav(() => setMobileOpen(false))}
+          </aside>
         </div>
-      </main>
+      )}
+
+      {/* Main canvas */}
+      <div className="flex-1 flex flex-col min-w-0 ml-2 sm:ml-3">
+        <div className="rounded-[28px] flex-1 flex flex-col overflow-hidden" style={{ backgroundColor: "var(--canvas-bg)" }}>
+          <Topbar onOpenMobileMenu={() => setMobileOpen(true)} />
+          <main id="main-content" className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <Outlet />
+          </main>
+        </div>
+      </div>
+<BackToTop />
+      <HelpFab />
     </div>
-  )
-}
+  );
+};

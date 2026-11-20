@@ -1,0 +1,6 @@
+ID,Name,Email,Amount,Status
+00101,Rahul Sharma,rahul@example.com,5000,Active
+101,Rahul Sharma Copy,rahul@example.com,5000,Active
+201,Karan Verma,karan@example.com,1200,Active
+201,Karan Verma Duplicate,karan@example.com,1200,Active
+202,Riya Sen,riya@example.com,3400,Active
