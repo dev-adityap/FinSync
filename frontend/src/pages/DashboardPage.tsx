@@ -182,11 +182,11 @@ export const DashboardPage: React.FC = () => {
       key={s.id}
       className={`rounded-[20px] p-4 border ${inverted ? "bg-[#141312] text-white border-white/10" : "bg-white border-[#EAECEF]"}`}
     >
-      <div className={`text-sm font-semibold ${inverted ? "text-white" : "text-[#111111]"}`}>{s.name}</div>
+      <div className={`text-sm font-semibold ${inverted ? "text-white" : "text-[var(--text-primary)]"}`}>{s.name}</div>
       <div className={`text-xs mt-1 ${inverted ? "text-[#A1A1AA]" : "text-[#6B7280]"}`}>{s.description || "Reconciliation session"}</div>
       <div className="mt-3 flex items-center justify-between">
         <span className={`text-xs ${inverted ? "text-[#A1A1AA]" : "text-[#6B7280]"}`}>Match rate</span>
-        <span className={`text-sm font-bold tabular-nums ${inverted ? "text-white" : "text-[#111111]"}`}>{s.matchPercentage.toFixed(1)}%</span>
+        <span className={`text-sm font-bold tabular-nums ${inverted ? "text-white" : "text-[var(--text-primary)]"}`}>{s.matchPercentage.toFixed(1)}%</span>
       </div>
       <div className="mt-2 h-1.5 rounded-full bg-[#F3F4F6] overflow-hidden">
         <div className="h-full bg-[#2563EB]" style={{ width: `${Math.min(100, s.matchPercentage)}%` }} />
@@ -203,7 +203,7 @@ export const DashboardPage: React.FC = () => {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111111]">Good afternoon.</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)]">Good afternoon.</h2>
             <p className="mt-1 text-sm sm:text-base text-[#6B7280]">Your data integrity, at a glance.</p>
           </div>
           <div className="flex flex-wrap items-center gap-2.5">
@@ -217,7 +217,7 @@ export const DashboardPage: React.FC = () => {
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EFF6FF] text-[#2563EB]">
             <GitCompareArrows className="h-6 w-6" />
           </div>
-          <h3 className="text-lg sm:text-xl font-semibold text-[#111111]">No reconciliations in this browser yet</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-[var(--text-primary)]">No reconciliations in this browser yet</h3>
           <p className="mx-auto max-w-lg text-sm leading-relaxed text-[#6B7280]">
             All metrics on this dashboard are computed from actual stored reconciliation sessions.
           </p>
@@ -236,7 +236,7 @@ export const DashboardPage: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111111]">Good afternoon.</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)]">Good afternoon.</h2>
           <p className="mt-1 text-sm sm:text-base text-[#6B7280]">Your data integrity, at a glance.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2.5">
@@ -251,7 +251,7 @@ export const DashboardPage: React.FC = () => {
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
         <GlassCard padding="md" className="xl:col-span-8 space-y-3">
           <div>
-            <h3 className="text-sm font-semibold text-[#111111]">Reconciliation Pipeline</h3>
+            <h3 className="text-sm font-semibold text-[var(--text-primary)]">Reconciliation Pipeline</h3>
             <p className="text-xs text-[#9CA3AF]">Matched records vs. total issues across session dates</p>
           </div>
           <div className="relative h-64 w-full">
@@ -273,10 +273,10 @@ export const DashboardPage: React.FC = () => {
 
         <GlassCard padding="md" className="xl:col-span-4 space-y-3">
           <div>
-            <h3 className="text-sm font-semibold text-[#111111]">Priority Audits</h3>
+            <h3 className="text-sm font-semibold text-[var(--text-primary)]">Priority Audits</h3>
             <p className="text-xs text-[#9CA3AF]">Discrepancies requiring attention</p>
           </div>
-          <div className="text-3xl font-bold tabular-nums text-[#111111]">{metrics.discrepancies}</div>
+          <div className="text-3xl font-bold tabular-nums text-[var(--text-primary)]">{metrics.discrepancies}</div>
           <div className="space-y-3 mt-2">
             {[
               { label: "Mismatched", value: metrics.discrepancies },
@@ -286,7 +286,7 @@ export const DashboardPage: React.FC = () => {
               <div key={item.label}>
                 <div className="flex items-center justify-between text-xs text-[#6B7280] mb-1">
                   <span>{item.label}</span>
-                  <span className="tabular-nums text-[#111111] font-medium">{item.value}</span>
+                  <span className="tabular-nums text-[var(--text-primary)] font-medium">{item.value}</span>
                 </div>
                 <div className="h-1.5 rounded-full bg-[#F3F4F6] overflow-hidden">
                   <div className="h-full bg-[#2563EB]" style={{ width: `${Math.min(100, (item.value / Math.max(1, metrics.recordsProcessed)) * 100)}%` }} />
@@ -318,3 +318,4 @@ export const DashboardPage: React.FC = () => {
     </div>
   );
 };
+

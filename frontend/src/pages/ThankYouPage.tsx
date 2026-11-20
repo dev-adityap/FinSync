@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const ThankYouPage: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F4F5F7] text-[#111111] p-6">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F4F5F7] text-[var(--text-primary)] p-6">
       <h1 className="text-3xl font-bold">Thank you</h1>
       <p className="mt-2 text-[#6B7280]">Your submission was received.</p>
       <div className="mt-6 flex flex-wrap gap-3">
@@ -15,3 +15,4 @@ export const ThankYouPage: React.FC = () => {
   );
 };
 export default ThankYouPage;
+

@@ -107,4 +107,8 @@ async def unhandled_exception_handler(_: Request, __: Exception) -> JSONResponse
     )
 
 
+@app.get("/")
+async def root() -> dict:
+    return {"service": "FinSync API", "status": "ok", "health": "/api/health"}
+
 app.include_router(api_router)

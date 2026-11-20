@@ -1092,7 +1092,7 @@ export const NewReconciliationPage: React.FC = () => {
       {/* Step 4: Validation Rules */}
       {currentStep === 4 && (
         <GlassPanel level={1} className="p-6 sm:p-8 space-y-4">
-          <h3 className="text-lg font-semibold text-[#111111]">Step 4: Validation Rules</h3>
+          <h3 className="text-lg font-semibold text-[var(--text-primary)]">Step 4: Validation Rules</h3>
           <p className="text-sm text-[#6B7280]">Numeric tolerance: {validationOptions.numericTolerance}. Adjust in code or proceed.</p>
         </GlassPanel>
       )}
@@ -1100,7 +1100,7 @@ export const NewReconciliationPage: React.FC = () => {
       {/* Step 5: Review */}
       {currentStep === 5 && (
         <GlassPanel level={1} className="p-6 sm:p-8 space-y-4">
-          <h3 className="text-lg font-semibold text-[#111111]">Step 5: Review</h3>
+          <h3 className="text-lg font-semibold text-[var(--text-primary)]">Step 5: Review</h3>
           <p className="text-sm text-[#6B7280]">Review configuration and run reconciliation.</p>
           <GlassButton variant="primary" onClick={() => void handleRunReconciliation()} loading={isRunning}>
             Run Reconciliation
@@ -1111,7 +1111,7 @@ export const NewReconciliationPage: React.FC = () => {
       {/* Step 6: Run & Results */}
       {currentStep === 6 && (
         <GlassPanel level={1} className="p-6 sm:p-8 space-y-4">
-          <h3 className="text-lg font-semibold text-[#111111]">Step 6: Run & Results</h3>
+          <h3 className="text-lg font-semibold text-[var(--text-primary)]">Step 6: Run & Results</h3>
           <p className="text-sm text-[#6B7280]">{isRunning ? "Running reconciliation…" : executionError ?? "Completed. Redirecting…"}</p>
         </GlassPanel>
       )}
@@ -1171,7 +1171,7 @@ export const NewReconciliationPage: React.FC = () => {
             rows={3}
             value={quickProjectDesc}
             onChange={(e) => setQuickProjectDesc(e.target.value)}
-            className="w-full rounded-xl border border-[#E5E7EB] p-3 text-sm text-[#111111]"
+            className="w-full rounded-xl border border-[#E5E7EB] p-3 text-sm text-[var(--text-primary)]"
           />
         </div>
       </GlassModal>
