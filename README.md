@@ -10,7 +10,8 @@
 * **6-Step Guided Reconciliation Wizard:**
   1. **Create Session** — Project assignment, source/destination metadata, and `Tab`-to-fill smart placeholders.
   2. **Upload CSVs** — Instant schema preview, row counts, and type detection with built-in sample datasets.
-  3. **Column Mapping** — Interactive source-to-destination mapping with unique key validation and data type assignment (`String`, `Number`, `Currency (Decimal)`, `Date`, `Email`).
+  3. **Column Mapping** — Interactive source-to-destination mapping with 
+  unique key validation and data type assignment (`String`, `Number`, `Currency (Decimal)`, `Date`, `Email`).
   4. **Validation Rules** — Configurable tolerances, duplicate detection, and format checks.
   5. **Review** — Complete pre-flight configuration summary.
   6. **Run & Results** — Real-time execution with record-level status classification (`MATCHED`, `MISMATCHED`, `MISSING_IN_DESTINATION`, `UNEXPECTED_IN_DESTINATION`, `DUPLICATE`, `INVALID`).
